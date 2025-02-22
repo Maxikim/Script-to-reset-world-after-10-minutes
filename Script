@@ -1,0 +1,50 @@
+-- Set the reset time in seconds (10 minutes = 600 seconds)
+local resetTime = 600
+
+-- Function to reset the map
+local function resetMap()
+    -- Loop through all objects in the workspace and remove them
+    for _, object in pairs(workspace:GetChildren()) do
+        -- Only remove parts, models, and other objects, not players or scripts
+        if object:IsA("Part") or object:IsA("Model") then
+            object:Destroy()
+        end
+    end
+end
+
+-- Function to reset player
+local function resetPlayer(player)
+    -- Reset the player's character (respawn them)
+    local character = player.Character
+    if character then
+        character:BreakJoints()  -- Break the joints to make the character respawn
+    end
+    
+    -- Clear the player's inventory (backpack and tools)
+    local backpack = player:FindFirstChild("Backpack")
+    if backpack then
+        for _, item in pairs(backpack:GetChildren()) do
+            item:Destroy()  -- Destroy items in the player's backpack (inventory)
+        end
+    end
+end
+
+-- Function to reset all players and the map after 10 minutes
+local function resetAllPlayers()
+    -- Reset the map
+    resetMap()
+
+    -- Reset all players in the game
+    for _, player in pairs(game.Players:GetPlayers()) do
+        resetPlayer(player)
+    end
+end
+
+-- Start a countdown timer
+wait(resetTime)
+
+-- Reset everything after 10 minutes
+resetAllPlayers()
+
+-- Optionally, print a message in the output for confirmation
+print("Map and players have been reset after 10 minutes!")
